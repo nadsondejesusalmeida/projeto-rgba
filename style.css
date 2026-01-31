@@ -1,21 +1,5 @@
 @charset 'UTF-8';
 
-:root {
-	--text-color: #000000;
-	--background-color: #FFFFFF;
-	--card-background: #EFEFEF;
-	--range-progress-color: #FF0000;
-	--trick-color: #757575;
-}
-
-[data-theme="dark"] {
-	--text-color: #FFFFFF;
-	--background-color: #000000;
-	--card-background: #373232;
-	--range-progress-color: #CA0030;
-	--trick-color: #A0A0A0;
-}
-
 * {
 	margin: 0;
 	padding: 0;
@@ -26,8 +10,8 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 	width: 100vw;
 	height: 100dvh;
-	background-color: var(--background-color);
-	color: var(--text-color);
+	background-color: var(--primary-background-color);
+	color: var(--primary-text-color);
 	transition: background-color 0.3s ease;
 }
 
@@ -36,7 +20,7 @@ header {
 	padding: 5px 10px;
 	width: 100%;
 	display: flex;
-	justify-content: flex-end;
+	justify-content: space-between;
 	align-items: center;
 	background-color: var(--range-progress-color);
 	transition: background-color 0.3s ease;
@@ -48,8 +32,8 @@ header {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background-color: var(--text-color);
-	color: var(--background-color);
+	background-color: var(--primary-text-color);
+	color: var(--primary-background-color);
 	border: none;
 	border-radius: 50%;
 	transition: background-color 0.5s ease, color 0.5s ease;
@@ -57,7 +41,7 @@ header {
 
 #theme-color-button:hover {
 	background-color: #757575;
-	color: var(--text-color);
+	color: var(--primary-text-color);
 }
 
 #theme-color-icon {
@@ -80,9 +64,9 @@ main {
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
-	background-color: var(--card-background);
-	color: var(--text-color);
-	border: 1px solid var(--text-color);
+	background-color: var(--primary-background-color);
+	color: var(--primary-text-color);
+	border: 1px solid var(--primary-text-color);
 	border-radius: 20px;
 	transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -153,25 +137,25 @@ main {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	border-top: 1px dashed var(--text-color);
+	border-top: 1px dashed var(--primary-text-color);
 }
 
 #rgba-display-text {
 	font-size: 1em;
 	font-weight: 500;
 	background-color: transparent;
-	color: var(--text-color);
+	color: var(--primary-text-color);
 	border: none;
 }
 
 #rgba-copy-button {
 	padding: 5px;
-	font-size: 1.25em;
+	font-size: 1em;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background-color: var(--text-color);
-	color: var(--background-color);
+	background-color: var(--primary-text-color);
+	color: var(--primary-background-color);
 	border: 3px solid transparent;
 	border-radius: 5px;
 }
