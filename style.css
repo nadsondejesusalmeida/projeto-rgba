@@ -86,8 +86,7 @@ main {
 	align-items: center;
 }
 
-#color-channels .item .light-type-text,
-#color-channels .item .opacity-type {
+#color-channels .item .abbreviation-of-type {
 	margin-right: 10px;
 	font-size: 1.5em;
 	font-weight: bold;
