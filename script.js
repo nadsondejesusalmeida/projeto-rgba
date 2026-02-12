@@ -2,9 +2,6 @@ const rgbaControl = document.querySelectorAll('.rgba-control');
 const rgbaDisplayText = document.getElementById('rgba-display-text');
 const rgbaCopyButton = document.getElementById('rgba-copy-button');
 
-const rgbRangeProgressValue = 100 / 255;
-const opacityRangeProgressValue = 100 / 1;
-
 const rangeProgressColor = 'var(--range-progress-color)';
 const trickColor = 'var(--trick-color)';
 
@@ -25,61 +22,64 @@ const rgbaToRgb = (text) => {
 }
 
 const saveRgbaToLocalStorage = () => {
-	const values = {};
-	const rgbaValues = Array.from(rgbaControl).forEach((control, index) => {
+	const rgbaValues = Array.from(rgbaControl).map((control, index) => {
+		const values = {};
+		values.value = Number(control.value) || 0;
+		values.rangeProgressColor = 100 / 255;
+		
 		switch (index) {
-			case 0:
-				values.redLightValue = Number(control.value) || 0;
+			case 0: // Luz vermelha (R)
+				values.name = 'redLight';
 				break;
-			case 1:
-				values.greenLightValue = Number(control.value) || 0;
+			case 1: // Luz verde (G)
+				values.name = 'greenLight';
 				break;
-			case 2:
-				values.blueLightValue = Number(control.value) || 0;
+			case 2: // Luz azul (B)
+				values.name = 'blueLight';
 				break;
-			case 3:
-				values.opacityValue = Number(control.value) || 1;
+			case 3: // Opacidade (A)
+				values.name = 'opacity';
+				values.value = Number(control.value) || 1;
+				values.rangeProgressColor = 100 / 1;
+				break;
 		}
 		
 		return values;
-});
+	});
 	
-	localStorage.setItem('rgbaValues', JSON.stringify(values));
+	localStorage.setItem('rgbaValues', JSON.stringify(rgbaValues));
+}
+
+const getRgbaFromLocalStorage = () => {
+	let rgbaValues = JSON.parse(localStorage.getItem('rgbaValues'));
+	
+	if (!rgbaValues) {
+		saveRgbaToLocalStorage();
+		rgbaValues = JSON.parse(localStorage.getItem('rgbaValues'));
+	}
+	
+	return rgbaValues;
 }
 
 const loadRgbaFromLocalStorage = () => {
-	const savedRgba = JSON.parse(localStorage.getItem('rgbaValues')) || {};
-	const { redLightValue,
-			greenLightValue,
-			blueLightValue,
-			opacityValue } = savedRgba;
+	const savedRgba = getRgbaFromLocalStorage();
+	const [ redLight,
+			greenLight,
+			blueLight,
+			opacity ] = savedRgba;
 	
-	rgbaDisplayText.textContent = rgbaToRgb(rgba(redLightValue, greenLightValue, blueLightValue, opacityValue));
+	rgbaDisplayText.textContent = rgbaToRgb(rgba(redLight.value, greenLight.value, blueLight.value, opacity.value));
 	
 	rgbaControl.forEach((control, index) => {
 		const rgbaControlDisplay = control.parentNode.querySelector('.light-type-value');
 		
-		switch (index) {
-			case 0:
-				control.value = redLightValue;
-				control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * rgbRangeProgressValue);
-				break;
-			case 1:
-				control.value = greenLightValue;
-				control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * rgbRangeProgressValue);
-				break;
-			case 2:
-				control.value = blueLightValue;
-				control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * rgbRangeProgressValue);
-				break;
-			case 3:
-				control.value = opacityValue;
-				control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * opacityRangeProgressValue);
-		}
+		control.value = savedRgba[index].value;
+		control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * savedRgba[index].rangeProgressColor);
+		
 		
 		rgbaControlDisplay.textContent = control.value;
 		
-		document.body.style.backgroundColor = rgba(redLightValue, greenLightValue, blueLightValue, opacityValue);
+		document.body.style.backgroundColor = rgba(redLight.value, greenLight.value, blueLight.value, opacity.value);
 	});
 }
 
@@ -88,37 +88,20 @@ rgbaControl.forEach((control, index) => {
 		saveRgbaToLocalStorage();
 		
 		const rgbaControlDisplay = control.parentNode.querySelector('.light-type-value');
-		const savedRgba = JSON.parse(localStorage.getItem('rgbaValues'));
-		const { redLightValue,
-				greenLightValue,
-				blueLightValue,
-				opacityValue } = savedRgba;
+		const savedRgba = getRgbaFromLocalStorage();
+		const [ redLight,
+				greenLight,
+				blueLight,
+				opacity ] = savedRgba;
 		
-		rgbaDisplayText.textContent = rgbaToRgb(rgba(redLightValue, greenLightValue, blueLightValue, opacityValue));
+		rgbaDisplayText.textContent = rgbaToRgb(rgba(redLight.value, greenLight.value, blueLight.value, opacity.value));
 		
-		control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * opacityRangeProgressValue);
-		
-		switch (index) {
-			case 0:
-				control.value = redLightValue;
-				control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * rgbRangeProgressValue);
-				break;
-			case 1:
-				control.value = greenLightValue;
-				control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * rgbRangeProgressValue);
-				break;
-			case 2:
-				control.value = blueLightValue;
-				control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * rgbRangeProgressValue);
-				break;
-			case 3:
-				control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * opacityRangeProgressValue);
-				break;
-		}
+		control.value = savedRgba[index].value;
+		control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * savedRgba[index].rangeProgressColor);
 		
 		rgbaControlDisplay.textContent = control.value;
 		
-		document.body.style.backgroundColor = rgba(redLightValue, greenLightValue, blueLightValue, opacityValue);
+		document.body.style.backgroundColor = rgba(redLight.value, greenLight.value, blueLight.value, opacity.value);
 	});
 });
 
