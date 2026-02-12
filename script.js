@@ -1,8 +1,4 @@
-const lightIntensityControl = document.querySelectorAll('.light-intensity-control');
-const opacityControl = document.getElementById('opacity-control');
-const lightTypeValue = document.querySelectorAll('.light-type-value');
-
-const rgbaDisplay = document.getElementById('rgba-display');
+const rgbaControl = document.querySelectorAll('.rgba-control');
 const rgbaDisplayText = document.getElementById('rgba-display-text');
 const rgbaCopyButton = document.getElementById('rgba-copy-button');
 
@@ -12,15 +8,15 @@ const opacityRangeProgressValue = 100 / 1;
 const rangeProgressColor = 'var(--range-progress-color)';
 const trickColor = 'var(--trick-color)';
 
-function setRangeColor(direction, firstColor, secondColor, value) {
+const setRangeColor = (direction, firstColor, secondColor, value) => {
 	return `linear-gradient(${direction}, ${firstColor} ${value}%, ${secondColor} ${value}%)`;
 }
 
-function rgba(red, green, blue, opacity) {
+const rgba = (red, green, blue, opacity) => {
 	return `rgba(${red}, ${green}, ${blue}, ${opacity})`;
 }
 
-function rgbaToRgb(text) {
+const rgbaToRgb = (text) => {
 	if (text.includes(', 1)')) {
 		return `${text.replace('rgba(', 'rgb(').replace(', 1)', ')')}`
 	} else {
@@ -28,69 +24,113 @@ function rgbaToRgb(text) {
 	}
 }
 
-lightIntensityControl[0].value = localStorage.getItem('redLightValue') || 0;
-lightIntensityControl[1].value = localStorage.getItem('greenLightValue') || 0;
-lightIntensityControl[2].value = localStorage.getItem('blueLightValue') || 0;
-opacityControl.value = localStorage.getItem('opacityValue') || 1;
-
-let redLightValue = lightIntensityControl[0].value;
-let greenLightValue = lightIntensityControl[1].value;
-let blueLightValue = lightIntensityControl[2].value;
-let opacityValue = opacityControl.value;
-
-document.querySelector('body').style.backgroundColor = rgba(redLightValue, greenLightValue, blueLightValue, opacityValue);
-rgbaDisplayText.innerText = rgbaToRgb(rgba(redLightValue, greenLightValue, blueLightValue, opacityValue));
-
-lightIntensityControl.forEach((item, index) => {
-	lightIntensityControl[index].style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, lightIntensityControl[index].value * rgbRangeProgressValue);
+const saveRgbaToLocalStorage = () => {
+	const values = {};
+	const rgbaValues = Array.from(rgbaControl).forEach((control, index) => {
+		switch (index) {
+			case 0:
+				values.redLightValue = Number(control.value) || 0;
+				break;
+			case 1:
+				values.greenLightValue = Number(control.value) || 0;
+				break;
+			case 2:
+				values.blueLightValue = Number(control.value) || 0;
+				break;
+			case 3:
+				values.opacityValue = Number(control.value) || 1;
+		}
+		
+		return values;
+});
 	
-	lightTypeValue[index].textContent = `${lightIntensityControl[index].value}`;
+	localStorage.setItem('rgbaValues', JSON.stringify(values));
+}
+
+const loadRgbaFromLocalStorage = () => {
+	const savedRgba = JSON.parse(localStorage.getItem('rgbaValues')) || {};
+	const { redLightValue,
+			greenLightValue,
+			blueLightValue,
+			opacityValue } = savedRgba;
 	
-	item.addEventListener('input', () => {
-		lightIntensityControl.forEach((item2, index2) => {
-			item2.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, lightIntensityControl[index2].value * rgbRangeProgressValue);
-		});
+	rgbaDisplayText.textContent = rgbaToRgb(rgba(redLightValue, greenLightValue, blueLightValue, opacityValue));
+	
+	rgbaControl.forEach((control, index) => {
+		const rgbaControlDisplay = control.parentNode.querySelector('.light-type-value');
 		
-		redLightValue = lightIntensityControl[0].value;
-		greenLightValue = lightIntensityControl[1].value;
-		blueLightValue = lightIntensityControl[2].value;
-		opacityValue = opacityControl.value;
+		switch (index) {
+			case 0:
+				control.value = redLightValue;
+				control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * rgbRangeProgressValue);
+				break;
+			case 1:
+				control.value = greenLightValue;
+				control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * rgbRangeProgressValue);
+				break;
+			case 2:
+				control.value = blueLightValue;
+				control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * rgbRangeProgressValue);
+				break;
+			case 3:
+				control.value = opacityValue;
+				control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * opacityRangeProgressValue);
+		}
 		
-		document.querySelector('body').style.backgroundColor = rgba(redLightValue, greenLightValue, blueLightValue, opacityValue);
+		rgbaControlDisplay.textContent = control.value;
 		
-		rgbaDisplayText.innerText = rgbaToRgb(rgba(redLightValue, greenLightValue, blueLightValue, opacityValue));
+		document.body.style.backgroundColor = rgba(redLightValue, greenLightValue, blueLightValue, opacityValue);
+	});
+}
+
+rgbaControl.forEach((control, index) => {
+	control.addEventListener('input', () => {
+		saveRgbaToLocalStorage();
 		
-		lightTypeValue[index].textContent = `${lightIntensityControl[index].value}`;
+		const rgbaControlDisplay = control.parentNode.querySelector('.light-type-value');
+		const savedRgba = JSON.parse(localStorage.getItem('rgbaValues'));
+		const { redLightValue,
+				greenLightValue,
+				blueLightValue,
+				opacityValue } = savedRgba;
 		
-		localStorage.setItem('redLightValue', redLightValue);
-		localStorage.setItem('greenLightValue', greenLightValue);
-		localStorage.setItem('blueLightValue', blueLightValue);
+		rgbaDisplayText.textContent = rgbaToRgb(rgba(redLightValue, greenLightValue, blueLightValue, opacityValue));
+		
+		control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * opacityRangeProgressValue);
+		
+		switch (index) {
+			case 0:
+				control.value = redLightValue;
+				control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * rgbRangeProgressValue);
+				break;
+			case 1:
+				control.value = greenLightValue;
+				control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * rgbRangeProgressValue);
+				break;
+			case 2:
+				control.value = blueLightValue;
+				control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * rgbRangeProgressValue);
+				break;
+			case 3:
+				control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * opacityRangeProgressValue);
+				break;
+		}
+		
+		rgbaControlDisplay.textContent = control.value;
+		
+		document.body.style.backgroundColor = rgba(redLightValue, greenLightValue, blueLightValue, opacityValue);
 	});
 });
 
-opacityControl.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, opacityValue * opacityRangeProgressValue);
-
-lightTypeValue[3].textContent = opacityValue;
-	
-opacityControl.addEventListener('input', (e) => {
-	opacityValue = opacityControl.value;
-	
-	opacityControl.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, opacityValue * opacityRangeProgressValue);
-	lightTypeValue[3].textContent = opacityValue;
-	
-	document.querySelector('body').style.backgroundColor = rgbaToRgb(rgba(redLightValue, greenLightValue, blueLightValue, opacityValue));
-	
-	rgbaDisplayText.innerText = rgbaToRgb(rgba(redLightValue, greenLightValue, blueLightValue, opacityValue));
-	
-	localStorage.setItem('opacityValue', opacityValue);
-});
-
-rgbaCopyButton.addEventListener('click', function() {
-	this.style.borderColor = '#00FF00';
+rgbaCopyButton.addEventListener('click', (event) => {
+	const targetButton = event.currentTarget;
+	targetButton.style.borderColor = '#00FF00';
 	
 	setTimeout(() => {
-		rgbaCopyButton.style.borderColor = 'transparent';
-	}, 1000);
+		targetButton.style.borderColor = 'transparent';
+	}, 1500);
 	
-	navigator.clipboard.writeText(rgbaDisplayText.innerText);
-})
+	navigator.clipboard.writeText(rgbaDisplayText.textContent);
+});
+
+loadRgbaFromLocalStorage();
