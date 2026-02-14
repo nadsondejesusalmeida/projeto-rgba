@@ -1,9 +1,8 @@
 import {
 	setRangeColor,
 	rgba,
-	rgbaToRgb,
-	rangeProgressColor,
-	trickColor
+	rangeColorSettings,
+	rgbaSettings
 } from './scripts/ui.js';
 
 import {
@@ -21,20 +20,26 @@ rgbaControls.forEach((control, index) => {
 		saveRgbaToLocalStorage(rgbaControls);
 		
 		const rgbaControlDisplay = control.parentNode.querySelector('.light-type-value');
+		
 		const savedRgba = getRgbaFromLocalStorage(rgbaControls);
-		const [ redLight,
-				greenLight,
-				blueLight,
-				opacity ] = savedRgba;
+		const [ redLight, greenLight, blueLight, opacity ] = savedRgba;
 		
-		rgbaDisplayText.textContent = rgbaToRgb(rgba(redLight.value, greenLight.value, blueLight.value, opacity.value));
+		rgbaSettings.updateData({
+			red: redLight.value,
+			green: greenLight.value,
+			blue: blueLight.value,
+			opacity: opacity.value
+		});
 		
-		control.value = savedRgba[index].value;
-		control.style.backgroundImage = setRangeColor('to right', rangeProgressColor, trickColor, control.value * savedRgba[index].rangeProgressColor);
+		rangeColorSettings.value = control.value * savedRgba[index].rangeProgressColor;
+		
+		rgbaDisplayText.textContent = rgba(rgbaSettings);
+		
+		control.style.backgroundImage = setRangeColor(rangeColorSettings);
 		
 		rgbaControlDisplay.textContent = control.value;
 		
-		document.body.style.backgroundColor = rgba(redLight.value, greenLight.value, blueLight.value, opacity.value);
+		document.body.style.backgroundColor = rgba(rgbaSettings);
 	});
 });
 
