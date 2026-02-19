@@ -1,9 +1,9 @@
 import {
-	setRangeColor,
-	rgba,
+	toRgbaString,
 	rangeColorSettings,
-	rgbaSettings
-} from './ui.js';
+	rgbaSettings,
+	getRangeGradient
+} from '/assets/scripts/utils/colors/index.js';
 
 export const saveRgbaToLocalStorage = (controls) => {
 	const rgbaValues = Array.from(controls).map((control, index) => {
@@ -50,15 +50,15 @@ export const loadRgbaFromLocalStorage = (controls, displayText) => {
 	const [ redLight, greenLight, blueLight, opacity ] = savedRgba;
 	
 	rgbaSettings.updateData({
-		red: redLight.value,
-		green: greenLight.value,
-		blue: blueLight.value,
-		opacity: opacity.value
+		r: redLight.value,
+		g: greenLight.value,
+		b: blueLight.value,
+		a: opacity.value
 	});
 	
-	displayText.textContent = rgba(rgbaSettings);
+	displayText.textContent = toRgbaString(rgbaSettings);
 	
-	document.body.style.backgroundColor = rgba(rgbaSettings);
+	document.body.style.backgroundColor = toRgbaString(rgbaSettings);
 	
 	controls.forEach((control, index) => {
 		const rgbaControlDisplay = control.parentNode.querySelector('.light-type-value');
@@ -67,7 +67,7 @@ export const loadRgbaFromLocalStorage = (controls, displayText) => {
 		
 		rangeColorSettings.value = control.value * savedRgba[index].rangeProgressColor;
 		
-		control.style.backgroundImage = setRangeColor(rangeColorSettings);
+		control.style.backgroundImage = getRangeGradient(rangeColorSettings);
 		
 		rgbaControlDisplay.textContent = control.value;
 	});
