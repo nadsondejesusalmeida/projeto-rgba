@@ -12,13 +12,13 @@ export const rgba = ({red, green, blue, opacity}) => {
 	return rgbaText;
 }
 
-export const rangeProgressColor = 'var(--range-progress-color)';
-export const trickColor = 'var(--trick-color)';
+export const activeTrackColor = 'var(--active-track-color)';
+export const inactiveTrackColor = 'var(--inactive-track-color)';
 
 export const rangeColorSettings = {
 	direction: 'to right',
-	firstColor: rangeProgressColor,
-	secondColor: trickColor
+	firstColor: activeTrackColor,
+	secondColor: inactiveTrackColor
 };
 
 export const rgbaSettings = {

@@ -22,7 +22,7 @@ header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	background-color: var(--range-progress-color);
+	background-color: var(--active-track-color);
 	transition: background-color 0.3s ease;
 }
 
@@ -111,16 +111,16 @@ main {
 }
 
 #color-channels .item input[type="range"]::-webkit-slider-thumb {
-	width: 15px;
-	height: 15px;
-	background-color: var(--range-progress-color);
+	width: var(--slider-thumb-size);
+	height: var(--slider-thumb-size);
+	background-color: var(--active-track-color);
 	border-radius: 50%;
 }
 
 #color-channels .item input[type="range"]::-moz-range-thumb {
-	width: 15px;
-	height: 15px;
-	background-color: var(--range-progress-color);
+	width: var(--slider-thumb-size);
+	height: var(--slider-thumb-size);
+	background-color: var(--active-track-color);
 	border: none;
 	border-radius: 50%;
 }

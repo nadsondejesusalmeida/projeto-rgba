@@ -47,10 +47,7 @@ export const getRgbaFromLocalStorage = (controls) => {
 
 export const loadRgbaFromLocalStorage = (controls, displayText) => {
 	const savedRgba = getRgbaFromLocalStorage(controls);
-	const [ redLight,
-			greenLight,
-			blueLight,
-			opacity ] = savedRgba;
+	const [ redLight, greenLight, blueLight, opacity ] = savedRgba;
 	
 	rgbaSettings.updateData({
 		red: redLight.value,
