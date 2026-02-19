@@ -1,5 +1,8 @@
-export const setRangeColor = ({direction, firstColor, secondColor, value}) => {
-	return `linear-gradient(${direction}, ${firstColor} ${value}%, ${secondColor} ${value}%)`;
+const activeTrackColor = 'var(--active-track-color)';
+const inactiveTrackColor = 'var(--inactive-track-color)';
+
+export const setRangeColor = ({direction, activeColor, inactiveColor, value}) => {
+	return `linear-gradient(${direction}, ${activeColor} ${value}%, ${inactiveColor} ${value}%)`;
 }
 
 export const rgba = ({red, green, blue, opacity}) => {
@@ -12,13 +15,10 @@ export const rgba = ({red, green, blue, opacity}) => {
 	return rgbaText;
 }
 
-const activeTrackColor = 'var(--active-track-color)';
-const inactiveTrackColor = 'var(--inactive-track-color)';
-
 export const rangeColorSettings = {
 	direction: 'to right',
-	firstColor: activeTrackColor,
-	secondColor: inactiveTrackColor
+	activeColor: activeTrackColor,
+	inactiveColor: inactiveTrackColor
 };
 
 export const rgbaSettings = {
