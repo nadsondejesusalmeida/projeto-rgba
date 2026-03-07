@@ -3,7 +3,7 @@ import {
 	rangeColorSettings,
 	rgbaSettings,
 	getRangeGradient
-} from '/assets/scripts/utils/colors/index.js';
+} from '/assets/scripts/index.js';
 
 import {
 	saveRgbaToLocalStorage,
