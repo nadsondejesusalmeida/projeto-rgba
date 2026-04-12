@@ -3,7 +3,7 @@ import {
 	rangeColorSettings,
 	rgbaSettings,
 	getRangeGradient
-} from '/assets/scripts/utils/colors/index.js';
+} from '/assets/scripts/index.js';
 
 export const saveRgbaToLocalStorage = (controls) => {
 	const rgbaValues = Array.from(controls).map((control, index) => {
@@ -57,7 +57,6 @@ export const loadRgbaFromLocalStorage = (controls, displayText) => {
 	});
 	
 	displayText.textContent = toRgbaString(rgbaSettings);
-	
 	document.body.style.backgroundColor = toRgbaString(rgbaSettings);
 	
 	controls.forEach((control, index) => {
