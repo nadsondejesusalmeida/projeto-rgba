@@ -3,7 +3,7 @@ import {
 	rangeColorSettings,
 	rgbaSettings,
 	getRangeGradient
-} from '/assets/scripts/index.js';
+} from 'https://nadsondejesusalmeida.github.io/assets/scripts/index.js';
 
 export const saveRgbaToLocalStorage = (controls) => {
 	const rgbaValues = Array.from(controls).map((control, index) => {
