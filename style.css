@@ -27,12 +27,6 @@ header {
 	color: var(--primary-text-color);
 }
 
-#theme-color-button {
-	width: 20px;
-	height: 20px;
-	pointer-events: none;
-}
-
 main {
 	width: 100%;
 	display: flex;
